@@ -12,9 +12,12 @@ export function el(name, attributes = {}, ...children) {
   }
 
   for (const child of children) {
+    /*console.log('child', child, typeof child);*/
     if (typeof child === 'string' || typeof child === 'number') {
       e.appendChild(document.createTextNode(child.toString()));
     } else {
+
+      /*console.log(child);*/
       e.appendChild(child);
     }
   }

@@ -7,8 +7,19 @@ import { renderDetails, renderFrontpage, searchAndRender } from './lib/ui.js';
  * @returns {Promise<void>}
  */
 async function onSearch(e) {
-  /* TODO útfæra */
+  e.preventDefault();
+  
+if (!e.target) {
+    return; 
 }
+
+  const query = e.target.querySelector('input').value;
+
+  searchAndRender(document.body, query);
+  
+  /*|| e.target instanceof HTEMLElemen*/
+}
+
 
 /**
  * Athugar hvaða síðu við erum á út frá query-string og birtir.
@@ -17,6 +28,25 @@ async function onSearch(e) {
  */
 function route() {
   /* TODO athuga hvaða síðu á að birta og birta */
+  const { search } = window.location;
+
+  /* console.log(search) */
+
+  const qs = new URLSearchParams(search);
+  /* console.log(qs); */
+
+  const query = qs.get('query')?? undefined;
+  const id = qs.get('id');
+  const ekkitil = qs.get('ekkitil');
+
+  const parentElement = document.body;
+  console.log('ekki :>> ',ekkitil);
+  if (id) {
+    renderDetails(parentElement, id);
+  } else {
+    renderFrontpage(parentElement, onSearch, query );
+    renderFrontpage(document.querySelector('aside'), onSearch, query );
+  }
 }
 
 // Bregst við því þegar við notum vafra til að fara til baka eða áfram.

@@ -8,7 +8,16 @@ import { el } from './elements.js';
  * @returns {HTMLElement} Leitarform.
  */
 export function renderSearchForm(searchHandler, query = undefined) {
-  /* TODO útfæra */
+  const form = el(
+  'form', 
+  {},
+  el('input', {value: query ?? '', name: 'query' }), 
+  el('button', {}, 'leita') 
+  );
+
+  form.addEventListener('submit', searchHandler);
+
+  return form;
 }
 
 /**
@@ -35,7 +44,40 @@ function setNotLoading(parentElement, searchForm = undefined) {
  * @param {string} query Leitarstrengur.
  */
 function createSearchResults(results, query) {
-  /* TODO útfæra */
+ 
+  if (!results) {
+    const noResultsElement = el(
+    'li', 
+    {}, 
+    `villa við leit að ${query}`
+    );
+    list.appendChild(noResultsElement);
+    return list;
+  }
+  const list = el('ul', { class: 'search-results'});
+
+if (results.length === 0) {
+  const noResultsElement = el(
+    'li',
+     {},
+     `Engar niðurstöður fyrir leit að ${query}`
+  );
+    list.appendChild(noResultsElement)
+    return list;
+}
+
+
+for (const result of resaults) {
+    const resultElement = el(
+      'li',
+      { class: 'search-result' },
+      el('span', { class : 'name' }, result.name ),
+      el('span', { class: 'mission'}, result.mission)
+    );
+      list.appendChild(resultElement);
+        return list;
+  }
+
 }
 
 /**
@@ -45,7 +87,20 @@ function createSearchResults(results, query) {
  * @param {string} query Leitarstrengur.
  */
 export async function searchAndRender(parentElement, searchForm, query) {
-  /* TODO útfæra */
+    parentElement.appendChild(el('p,', {},`Leita að ${query}`));
+    
+const ButtonElement = searchForm.querySelector('button');
+if (ButtonElement){
+  ButtonElement.setAttribute('disabled', 'disabled');
+}
+    const result = await searchLaunches(query);
+    if(ButtonElement) {
+      ButtonElement.setAttribute('disable', '');
+    }
+
+    const searchResultsElement = createSearchResults(results, query);
+
+    parentElement.appendChild(searchResultsElement); 
 }
 
 /**
@@ -59,8 +114,19 @@ export function renderFrontpage(
   searchHandler,
   query = undefined,
 ) {
-  const heading = el('h1', {}, 'Geimskotaleitin 🚀');
+  const heading = el(
+   'h1',
+    { class: 'heading', 'data-foo': 'bar' },
+      'Geimskotaleitin 🚀',
+      el('span', {},)
+      );
+
   const searchForm = renderSearchForm(searchHandler, query);
+  
+  
+  console.log(heading, searchForm);
+
+
   const container = el('main', {}, heading, searchForm);
   parentElement.appendChild(container);
 

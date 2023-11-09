@@ -33,7 +33,15 @@ export async function sleep(ms) {
  *  kom upp.
  */
 export async function searchLaunches(query) {
-  /* TODO útfæra */
+  const url = new URL('launch', API_URL);
+  url.searchParams.set('search', query );
+  url.searchParams.set('mode', 'list' );
+  
+  const response = await fetch(url);
+
+  const json = await response.json();
+  
+  return json.results;
 }
 
 /**
